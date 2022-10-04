@@ -1,53 +1,76 @@
 import tkinter as tk
 
 
+def add_digit(digit):
+    value = calc.get()
+    if value[0] == '0':
+        value = value[1:]
+    calc.delete(0, tk.END)
+    calc.insert(0, value+digit)
+
+
+def add_operation(operation):
+    value = calc.get()
+    if value[-1] in '-+/*':
+        value = value[:-1]
+    calc.delete(0, tk.END)
+    calc.insert(0, value+operation)
+
+
+def make_digit_button(digit):
+    return tk.Button(text=digit, bd=5, font=('Arial', 13), command=lambda: add_digit(digit))
+
+
+def make_operation_button(operation):
+    return tk.Button(text=operation, bd=5, font=('Arial', 13), fg='red',
+                     command=lambda: add_operation(operation))
+
+
+def make_calc_button(operation):
+    return tk.Button(text=operation, bd=5, font=('Arial', 13), fg='red',
+                     command=lambda: add_operation(operation))
+
+
 win = tk.Tk()
-photo = tk.PhotoImage(file=r'C:\Dev\Minesweeper\main\icon.png')
+win.geometry(f'300x330+250+200')
+win['bg'] = '#C0C0C0'
+win.title('Калькулятор')
 
 
-def get_entry():
-    value = name.get()
-    if value:
-        print(value)
-    else:
-        print('Empty value')
+calc = tk.Entry(win, justify=tk.RIGHT, font=('Arial', 16), width=15)
+calc.insert(0, '0')
+calc.grid(row=0, column=0, columnspan=4, stick='we', padx=5)
 
 
-def delete_entry():
-    name.delete(0, 'end')
+make_digit_button('1').grid(row=1, column=0, stick='wens', padx=5, pady=5)
+make_digit_button('2').grid(row=1, column=1, stick='wens', padx=5, pady=5)
+make_digit_button('3').grid(row=1, column=2, stick='wens', padx=5, pady=5)
+make_digit_button('4').grid(row=2, column=0, stick='wens', padx=5, pady=5)
+make_digit_button('5').grid(row=2, column=1, stick='wens', padx=5, pady=5)
+make_digit_button('6').grid(row=2, column=2, stick='wens', padx=5, pady=5)
+make_digit_button('7').grid(row=3, column=0, stick='wens', padx=5, pady=5)
+make_digit_button('8').grid(row=3, column=1, stick='wens', padx=5, pady=5)
+make_digit_button('9').grid(row=3, column=2, stick='wens', padx=5, pady=5)
+make_digit_button('0').grid(row=4, column=0, stick='wens', padx=5, pady=5)
+
+make_operation_button('+').grid(row=1, column=3, stick='wens', padx=5, pady=5)
+make_operation_button('-').grid(row=2, column=3, stick='wens', padx=5, pady=5)
+make_operation_button('*').grid(row=3, column=3, stick='wens', padx=5, pady=5)
+make_operation_button('/').grid(row=4, column=3, stick='wens', padx=5, pady=5)
+
+make_calc_button('=').grid(row=4, column=2, stick='wens', padx=5, pady=5)
 
 
-def submit():
-    print(name.get())
-    print(password.get())
-    delete_entry()
-    password.delete(0, tk.END)
 
 
+win.grid_columnconfigure(0, minsize=60)
+win.grid_columnconfigure(1, minsize=60)
+win.grid_columnconfigure(2, minsize=60)
+win.grid_columnconfigure(3, minsize=60)
 
-win.title('Мое приложение')
-win.iconphoto(False, photo)
-win.config(bg='#C5C9C7')
-win.geometry("500x600+100+100")
-
-
-tk.Label(win, text='Имя').grid(row=0, column=0, stick='we')
-tk.Label(win, text='Пароль').grid(row=1, column=0, stick='we')
-
-name = tk.Entry(win)
-name.grid(row=0, column=1)
-password = tk.Entry(win, show='*')
-password.grid(row=1, column=1)
-
-
-tk.Button(win, text='get', command=get_entry).grid(row=2, column=0, stick='we')
-tk.Button(win, text='delete', command=delete_entry).grid(row=2, column=1, stick='we')
-tk.Button(win, text='submit', command=submit).grid(row=3, column=0, stick='we')
-tk.Button(win, text='insert', command=lambda : name.insert(1, 'hello'))\
-    .grid(row=2, column=2, stick='we')
-
-
-win.grid_columnconfigure(0, minsize=100)
-win.grid_columnconfigure(1, minsize=100)
+win.grid_rowconfigure(1, minsize=60)
+win.grid_rowconfigure(2, minsize=60)
+win.grid_rowconfigure(3, minsize=60)
+win.grid_rowconfigure(4, minsize=60)
 
 win.mainloop()
