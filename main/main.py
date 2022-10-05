@@ -11,6 +11,7 @@ class CustomButton(tk.Button):
         self.y = y
         self.number = number
         self.is_mine = False
+        self.bombs_qty = 0
 
     def __repr__(self):
         return f'New Button{self.x} {self.y} {self.number} {self.is_mine}'
@@ -50,8 +51,8 @@ class Minesweeper:
         clicked_button.config(state='disabled')
 
     def create_widgets(self):
-        for i in range(self.ROW+2):
-            for j in range(self.COLUMNS+2):
+        for i in range(1, self.ROW+1):
+            for j in range(1, self.COLUMNS+1):
                 btn = self.buttons[i][j]
                 btn.grid(row=i, column=j)
 
@@ -66,13 +67,14 @@ class Minesweeper:
                     )
                 else:
                     btn.config(
-                        text=btn.number, disabledforeground='black'
+                        text=btn.bombs_qty, disabledforeground='black'
                     )
                 btn.grid(row=i, column=j)
 
     def start(self):
         self.create_widgets()
         self.plant_mines()
+        self.count_mines_in_cell()
         self.print_buttons()
         self.open_all_buttons()
         self.window.mainloop()
@@ -80,6 +82,19 @@ class Minesweeper:
     def print_buttons(self):
         for row_btn in self.buttons:
             print(row_btn)
+
+    def count_mines_in_cell(self):
+        for i in range(self.ROW+1):
+            for j in range(self.COLUMNS+1):
+                btn = self.buttons[i][j]
+                count_bombs = 0
+                if not btn.is_mine:
+                    for row_dx in [-1, 0, 1]:
+                        for column_dx in [-1, 0, 1]:
+                            neighbour = self.buttons[i+row_dx][j+column_dx]
+                            if neighbour.is_mine:
+                                count_bombs += 1
+                btn.bombs_qty = count_bombs
 
     def get_mines_places(self):
         indexes = list(range(1, self.ROW * self.COLUMNS + 1))
